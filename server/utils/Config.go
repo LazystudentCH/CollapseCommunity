@@ -12,7 +12,7 @@ type config struct {
 	HostAddr string `json:"host_addr"`
 
 	MysqlMaster      string `json:"mysql_master"`
-	MysqlSlave       string `json:"mysql_slave"`         //从节点配置
+	MysqlSlave       []string `json:"mysql_slave"`         //从节点配置
 	MysqlMaxOpenConn int    `json:"mysql_max_open_conn"` //最大连接数
 	MysqlMaxIdleConn int    `json:"mysql_max_idle_conn"` //最大空闲连接数
 

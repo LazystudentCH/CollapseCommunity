@@ -5,12 +5,13 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
+	"regexp"
 	"time"
 )
 
 var redisClient *redis.Pool
 var mysqlMasterConn *gorm.DB
-var mysqlSlaveConn *gorm.DB
+var mysqlSlaveConn map[string]*gorm.DB
 
 func ConnDb()  {
 	err := connMysql()
@@ -28,24 +29,38 @@ func ConnDb()  {
 }
 
 func connMysql() error {
+	//主节点
 	_db, err := gorm.Open("mysql", Config.MysqlMaster)
-	_db2, err := gorm.Open("mysql", Config.MysqlSlave)
 	if err != nil {
-
 		return err
 	}
-
-
 	mysqlMasterConn = _db
 	mysqlMasterConn.DB().SetMaxOpenConns(Config.MysqlMaxOpenConn)   //设置数据库连接池最大连接数
 	mysqlMasterConn.DB().SetMaxIdleConns(Config.MysqlMaxIdleConn)    //连接池最大允许的空闲连接数
 
-	mysqlSlaveConn = _db2
-	mysqlSlaveConn.DB().SetMaxOpenConns(Config.MysqlMaxOpenConn)   //设置数据库连接池最大连接数
-	mysqlSlaveConn.DB().SetMaxIdleConns(Config.MysqlMaxIdleConn)    //连接池最大允许的空闲连接数
+	//从节点
+	mysqlSlaveConn = make(map[string]*gorm.DB,0)
+	for _ , v := range Config.MysqlSlave {
+		_db2, err := gorm.Open("mysql", v)
+		if err != nil {
+			log.Warn("数据库连接失败:",v)
+			continue
+		}
+
+		_db2.DB().SetMaxOpenConns(Config.MysqlMaxOpenConn)   //设置数据库连接池最大连接数
+		_db2.DB().SetMaxIdleConns(Config.MysqlMaxIdleConn)    //连接池最大允许的空闲连接数
+		host := getDbHost(v)
+		mysqlSlaveConn[host] = _db2
+	}
 
 	log.Info("连接Mysql数据库成功")
 	return nil
+}
+
+func getDbHost(connStr string) string {
+	r,_ := regexp.Compile("\\(.*?\\)")
+	res := r.FindString(connStr)
+	return res[1:len(res)-1]
 }
 
 func connRedis() error {
@@ -81,7 +96,13 @@ func GetMysqlMasterConn() *gorm.DB {
 }
 
 func GetMysqlSlaveConn() *gorm.DB {
-	return mysqlSlaveConn
+	db := &gorm.DB{}
+	for _,v:= range mysqlSlaveConn {
+		db = v
+		break
+	}
+
+	return db
 }
 
 func GetRedisConn() redis.Conn {

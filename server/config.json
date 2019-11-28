@@ -2,7 +2,7 @@
   "host_addr": ":8081",
 
   "mysql_master": "",
-  "mysql_slave": "",
+  "mysql_slave": [""],
   "mysql_max_open_conn": 100,
   "mysql_max_Idle_conn": 20,
 
@@ -16,12 +16,12 @@
   "access_key_id": "",
   "access_key_secret":"",
 
-  "issuer": "",
+  "issuer": "mihoyo",
   "jwt_secret": "",
   "jwt_expire_time": 72,
 
   "qi_niu_ak": "",
-  "qi_niu_sk": "b-",
+  "qi_niu_sk": "",
   "qi_niu_url": "",
 
   "page_limit": 10
