@@ -1,0 +1,28 @@
+{
+  "host_addr": ":8081",
+
+  "mysql_master": "",
+  "mysql_slave": "",
+  "mysql_max_open_conn": 100,
+  "mysql_max_Idle_conn": 20,
+
+  "redis": ":6379",
+  "redis_max_active_conn": 700,
+  "redis_max_idle_conn": 1000,
+  "redis_max_idle_timeout": 3,
+
+  "sms_sign_name": "芽衣的树洞",
+  "template_code": "",
+  "access_key_id": "",
+  "access_key_secret":"",
+
+  "issuer": "",
+  "jwt_secret": "",
+  "jwt_expire_time": 72,
+
+  "qi_niu_ak": "",
+  "qi_niu_sk": "b-",
+  "qi_niu_url": "",
+
+  "page_limit": 10
+}
