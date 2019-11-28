@@ -4,7 +4,7 @@
 ![总体架构.png](http://q0u8r9imq.bkt.clouddn.com/%E6%80%BB%E4%BD%93.png)
 
 #### 模块划分：
-![模块划分.png](http://q0u8r9imq.bkt.clouddn.com/%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97.png)
+![模块划分.png](http://q0u8r9imq.bkt.clouddn.com/%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%971.png)
 
 #### 技术方案：
 - 数据库：mysql
